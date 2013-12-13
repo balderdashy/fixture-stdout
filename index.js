@@ -60,8 +60,6 @@ var StdOutFixture = function () {
 
 
 
-// Export a new instance
-// 
-var stdoutFixture = new StdOutFixture();
-module.exports = stdoutFixture;
+// Export the constructor
+module.exports = StdOutFixture;
 
