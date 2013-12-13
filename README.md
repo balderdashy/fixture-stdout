@@ -11,13 +11,14 @@ npm install fixture-stdout
 #### Example Usage:
 
 ```javascript
-var stdoutFixture = require('fixture-stdout');
+var StdOutFixture = require('fixture-stdout');
+var fixture = new StdOutFixture();
 
 // Keep track of writes so we can check them later..
 var _writes = [];
 
 // Capture a write to stdout
-stdoutFixture.capture( function onWrite (string, encoding, fd) {
+fixture.capture( function onWrite (string, encoding, fd) {
   _writes.push({
     string: string,
     encoding: encoding,
@@ -29,7 +30,7 @@ stdoutFixture.capture( function onWrite (string, encoding, fd) {
 console.log('a');
 console.log('b');
 
-stdoutFixture.release();
+fixture.release();
 
 // Now we're back to the original version of stdout
 console.log('c');
