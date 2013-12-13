@@ -1,13 +1,17 @@
-var stdoutFixture = require('./');
+var StdOutFixture = require('./');
 
 
-stdoutFixture.capture();
+
+
+var fixture = new StdOutFixture();
+
+fixture.capture( /* optionally, provide a capture fn. See readme for args. */ );
 
 // Uses intercepted version of stdout
 console.log('a');
 console.log('b');
 
-stdoutFixture.release();
+fixture.release();
 
 // Now we're back to the original version of stdout
 console.log('c');
