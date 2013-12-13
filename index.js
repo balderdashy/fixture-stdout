@@ -29,10 +29,9 @@ var StdOutFixture = function ( options ) {
 
 		stream.write = (function (write) {
 			return function (string, encoding, fd) {
-				var interceptorReturnedTruthy = callback(string, encoding, fd);
-				if (interceptorReturnedTruthy) {
-					write.apply(stream, arguments);
-				}
+				var interceptorReturnedFalse = false === callback(string, encoding, fd);
+				if (interceptorReturnedFalse) return;
+				else write.apply(stream, arguments);
 			};
 		})(stream.write);
 

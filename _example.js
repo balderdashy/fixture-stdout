@@ -5,7 +5,14 @@ var StdOutFixture = require('./');
 
 var fixture = new StdOutFixture();
 
-fixture.capture( /* optionally, provide a capture fn. See readme for args. */ );
+fixture.capture(
+	// Optionally, provide a capture fn here.
+	// See readme for args.
+	// e.g. function (string, encoding, fd) { return; }
+
+	// Return `false` to prevent the write.
+	// e.g. function (){ return false; }
+);
 
 // Uses intercepted version of stdout
 console.log('a');
