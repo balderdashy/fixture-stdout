@@ -13,8 +13,17 @@ npm install fixture-stdout
 ```javascript
 var stdoutFixture = require('fixture-stdout');
 
+// Keep track of writes so we can check them later..
+var _writes = [];
 
-stdoutFixture.capture();
+// Capture a write to stdout
+stdoutFixture.capture( function onWrite (string, encoding, fd) {
+  _writes.push({
+    string: string,
+    encoding: encoding,
+    fd: fd
+  });
+});
 
 // Uses intercepted version of stdout
 console.log('a');
@@ -25,6 +34,9 @@ stdoutFixture.release();
 // Now we're back to the original version of stdout
 console.log('c');
 console.log('d');
+
+// Voila!
+// Only the first two logs ("a" and "b") are in our `_writes` array
 ```
 
 
