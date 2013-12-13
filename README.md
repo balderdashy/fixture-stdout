@@ -24,6 +24,11 @@ fixture.capture( function onWrite (string, encoding, fd) {
     encoding: encoding,
     fd: fd
   });
+
+
+  // If you return `false`, you'll prevent the write to the original stream (useful for preventing log output during tests.)
+  return false;
+
 });
 
 // Uses intercepted version of stdout
@@ -38,6 +43,22 @@ console.log('d');
 
 // Voila!
 // Only the first two logs ("a" and "b") are in our `_writes` array
+```
+
+#### Watch streams other than `stdout`:
+
+```javascript
+var Fixture = require('fixture-stdout');
+
+var fixture = new Fixture({
+	stream: process.stderr
+});
+
+fixture.capture();
+console.error('hello world');
+fixture.release();
+console.error('world');
+
 ```
 
 

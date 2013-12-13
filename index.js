@@ -2,6 +2,7 @@
  * Module Dependencies
  */
 var util = require('util');
+var Stream = require('stream');
 
 
 /**
@@ -9,25 +10,34 @@ var util = require('util');
  * to stdout.
  *
  * Based on: https://gist.github.com/pguillory/729616
+ *
+ * @option {Stream}				[stream to intercept to-- defaults to stdout]
  * 
  * @return {Function}          [an instance of the fixture]
  */
 
-var StdOutFixture = function () {
+var StdOutFixture = function ( options ) {
+
+	// Options
+	if ( typeof options !== 'object' ) options = {};
+	if ( options instanceof Stream ) options = { stream: options };
+	var stream = options.stream || process.stdout;
 
 	// Replace stdout
 	var _intercept = function (callback) {
-		var original_stdout_write = process.stdout.write;
+		var original_stdout_write = stream.write;
 
-		process.stdout.write = (function (write) {
+		stream.write = (function (write) {
 			return function (string, encoding, fd) {
-				write.apply(process.stdout, arguments);
-				callback(string, encoding, fd);
+				var interceptorReturnedTruthy = callback(string, encoding, fd);
+				if (interceptorReturnedTruthy) {
+					write.apply(stream, arguments);
+				}
 			};
-		})(process.stdout.write);
+		})(stream.write);
 
 		return function _revert () {
-			process.stdout.write = original_stdout_write;
+			stream.write = original_stdout_write;
 		};
 	};
 
